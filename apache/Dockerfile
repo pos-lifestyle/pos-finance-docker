@@ -13,7 +13,7 @@ ENV APACHE_SERVER_NAME localhost
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        apache2>=2.4.25 \
+        apache2>=2.4.39 \
         curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
