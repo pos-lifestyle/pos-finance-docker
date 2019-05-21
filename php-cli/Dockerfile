@@ -3,13 +3,14 @@ FROM php:7.3-cli-stretch
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
+        curl \
         git \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
         ssh-client \
-        zip \
         unzip \
+        zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) \
@@ -82,3 +83,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('SHA384', 'composer-setup.php') === getenv('COMPOSER_SHA384')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} \
     && php -r "unlink('composer-setup.php');"
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y \
+        nodejs \
+        yarn
