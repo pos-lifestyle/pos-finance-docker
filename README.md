@@ -1,4 +1,4 @@
-# POS Market Docker Repository
+# POS Finance Docker Repository
 
 This repository contains all necessary files to build the Docker images for the POS Finance project.
 

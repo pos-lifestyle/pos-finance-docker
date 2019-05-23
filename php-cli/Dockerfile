@@ -1,68 +1,38 @@
-FROM php:7.1.25-cli-stretch
+FROM php:7.3-cli-stretch
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
+        curl \
         git \
-        libc-client-dev \
-        libbz2-dev \
-        libfreetype6-dev \
-        libgmp-dev \
         libicu-dev \
-        libjpeg62-turbo-dev \
-        libldap2-dev \
-        libmagickwand-dev \
-        libmcrypt-dev \
-        libpng-dev \
-        libtidy-dev \
+        libpq-dev \
         libxml2-dev \
-        libxslt1-dev \
-        mercurial \
-        patch \
         ssh-client \
-        subversion \
+        unzip \
+        zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-install -j"$(nproc)" \
+    && docker-php-ext-install -j$(nproc) \
         bcmath \
-        bz2 \
-        calendar \
-        dba \
-        exif \
-        gettext \
-        gmp \
         intl \
-        ldap \
-        mcrypt \
-        mysqli \
-        pcntl \
-        pdo_mysql \
-        soap \
-        sockets \
-        sysvmsg \
-        sysvsem \
-        sysvshm \
-        tidy \
-        xmlrpc \
-        xsl \
-        zip \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j"$(nproc)" gd \
+        json \
+        mbstring \
+        pdo_pgsql \
+        pgsql \
+        xml \
     && pecl install \
-        imagick \
-        oauth \
+        mcrypt \
         redis \
         xdebug \
     && docker-php-ext-enable \
-        imagick \
-        oauth \
         redis \
         xdebug
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
-ENV COMPOSER_SHA384 93b54496392c062774670ac18b134c3b3a95e5a5e5c8f1a9f115f203b75bf9a129d5daa8ba6a13e2cc8a1da0806388a8
-ENV COMPOSER_VERSION 1.6.5
+ENV COMPOSER_SHA384 48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5
+ENV COMPOSER_VERSION 1.8.5
 ENV PHP_CONFDIR=/usr/local/etc/php/conf.d
 ENV PHP_CONFIG_REGISTER_GLOBALS=Off
 ENV PHP_CONFIG_ALLOW_URL_FOPEN=On
@@ -107,9 +77,17 @@ RUN { \
     echo "upload_max_filesize=\${PHP_CONFIG_UPLOAD_MAX_FILESIZE}"; \
     echo "max_file_uploads=\${PHP_CONFIG_MAX_FILE_UPLOADS}"; \
     echo "max_input_vars=\${PHP_CONFIG_MAX_INPUT_VARS}"; \
-} | tee "${PHP_CONFDIR}/pos-market.ini"
+} | tee "${PHP_CONFDIR}/pos-finance.ini"
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('SHA384', 'composer-setup.php') === getenv('COMPOSER_SHA384')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} \
     && php -r "unlink('composer-setup.php');"
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y \
+        nodejs \
+        yarn
