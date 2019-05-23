@@ -1,55 +1,28 @@
-FROM php:7.1.25-fpm-stretch
+FROM php:7.3-fpm-stretch
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        libc-client-dev \
-        libbz2-dev \
-        libfreetype6-dev \
-        libgmp-dev \
         libicu-dev \
-        libjpeg62-turbo-dev \
-        libldap2-dev \
-        libmagickwand-dev \
-        libmcrypt-dev \
-        libpng-dev \
-        libtidy-dev \
+        libpq-dev \
         libxml2-dev \
-        libxslt1-dev \
+        zlib1g-dev \
+        libmemcached-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-install -j"$(nproc)" \
+    && docker-php-ext-install -j$(nproc) \
         bcmath \
-        bz2 \
-        calendar \
-        dba \
-        exif \
-        gettext \
-        gmp \
         intl \
-        ldap \
-        mcrypt \
-        mysqli \
-        pcntl \
-        pdo_mysql \
-        soap \
-        sockets \
-        sysvmsg \
-        sysvsem \
-        sysvshm \
-        tidy \
-        xmlrpc \
-        xsl \
-        zip \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j"$(nproc)" gd \
+        json \
+        mbstring \
+        pdo_pgsql \
+        pgsql \
+        xml \
     && pecl install \
-        imagick \
-        oauth \
+        memcached \
         redis \
         xdebug \
     && docker-php-ext-enable \
-        imagick \
-        oauth \
+        memcached \
         redis \
         xdebug
 
@@ -96,6 +69,6 @@ RUN { \
     echo "upload_max_filesize=\${PHP_CONFIG_UPLOAD_MAX_FILESIZE}"; \
     echo "max_file_uploads=\${PHP_CONFIG_MAX_FILE_UPLOADS}"; \
     echo "max_input_vars=\${PHP_CONFIG_MAX_INPUT_VARS}"; \
-} | tee "${PHP_CONFDIR}/pos-market.ini"
+} | tee "${PHP_CONFDIR}/pos-finance.ini"
 
 USER www-data:www-data
