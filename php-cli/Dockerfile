@@ -10,9 +10,11 @@ RUN rm -rf /var/lib/apt/lists/* \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
+        libzip-dev \
         ssh-client \
         unzip \
         zip \
+        zlib1g-dev \
     && docker-php-ext-install -j$(nproc) \
         bcmath \
         intl \
@@ -21,6 +23,7 @@ RUN rm -rf /var/lib/apt/lists/* \
         pdo_pgsql \
         pgsql \
         xml \
+        zip \
     && pecl install \
         mcrypt \
         redis \
