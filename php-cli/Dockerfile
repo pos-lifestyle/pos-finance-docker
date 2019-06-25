@@ -1,6 +1,8 @@
 FROM php:7.3-cli-stretch
 
-RUN apt-get update \
+RUN rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
         curl \
@@ -11,8 +13,6 @@ RUN apt-get update \
         ssh-client \
         unzip \
         zip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) \
         bcmath \
         intl \
@@ -87,9 +87,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         nodejs \
-        yarn \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        yarn
