@@ -8,9 +8,11 @@ RUN apt-get update \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
+        libzip-dev \
         ssh-client \
         unzip \
         zip \
+        zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) \
@@ -21,6 +23,7 @@ RUN apt-get update \
         pdo_pgsql \
         pgsql \
         xml \
+        zip \
     && pecl install \
         mcrypt \
         redis \
