@@ -45,6 +45,8 @@ ENV XDEBUG_PROFILER_ENABLE=Off
 
 # XDEBUG configuration
 RUN { \
+    echo "date.timezone=\${PHP_TIMEZONE:-UTC}"; \
+    echo; \
     echo "xdebug.idekey=\${XDEBUG_IDE_KEY}"; \
     echo "xdebug.remote_enable=On"; \
     echo "xdebug.remote_connect_back=Off"; \
