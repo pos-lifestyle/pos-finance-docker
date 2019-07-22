@@ -21,6 +21,7 @@ RUN apt-get update \
         json \
         mbstring \
         pdo_pgsql \
+        pdo_mysql \
         pgsql \
         xml \
         zip \
