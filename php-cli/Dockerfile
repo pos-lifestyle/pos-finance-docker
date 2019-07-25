@@ -20,6 +20,7 @@ RUN apt-get update \
         intl \
         json \
         mbstring \
+        pdo_mysql \
         pdo_pgsql \
         pgsql \
         xml \
