@@ -6,6 +6,7 @@ RUN apt-get update \
         curl \
         git \
         libicu-dev \
+        libpng-dev \
         libpq-dev \
         libxml2-dev \
         libzip-dev \
@@ -20,6 +21,7 @@ RUN apt-get update \
         intl \
         json \
         mbstring \
+        pdo_mysql \
         pdo_pgsql \
         pgsql \
         xml \
