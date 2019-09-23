@@ -6,6 +6,7 @@ RUN apt-get update \
         curl \
         git \
         libicu-dev \
+        libmcrypt-dev \
         libpng-dev \
         libpq-dev \
         libxml2-dev \
@@ -31,6 +32,7 @@ RUN apt-get update \
         redis \
         xdebug \
     && docker-php-ext-enable \
+        mcrypt \
         redis \
         xdebug
 

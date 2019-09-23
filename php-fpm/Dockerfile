@@ -5,6 +5,7 @@ RUN apt-get update \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
+        libzip-dev \
         zlib1g-dev \
         libmemcached-dev \
     && apt-get clean \
@@ -17,6 +18,7 @@ RUN apt-get update \
         pdo_pgsql \
         pgsql \
         xml \
+        zip \
     && pecl install \
         memcached \
         redis \
