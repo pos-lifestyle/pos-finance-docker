@@ -2,9 +2,11 @@ FROM php:7.3-apache-stretch
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        gnupg \
         libicu-dev \
         libpq-dev \
         libxml2-dev \
+        libzip-dev \
         zlib1g-dev \
         libmemcached-dev \
     && apt-get clean \
@@ -17,6 +19,7 @@ RUN apt-get update \
         pdo_pgsql \
         pgsql \
         xml \
+        zip \
     && pecl install \
         memcached \
         redis \

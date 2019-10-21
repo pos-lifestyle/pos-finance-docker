@@ -5,6 +5,7 @@ VERSION = 1.0.0
 
 build:
 	docker build -t poslifestyle/pos-finance-apache apache
+	docker build -t poslifestyle/pos-finance-openssh-client openssh-client
 	docker build -t poslifestyle/pos-finance-php-apache php-apache
 	docker build -t poslifestyle/pos-finance-php-cli php-cli
 	docker build -t poslifestyle/pos-finance-php-fpm php-fpm
