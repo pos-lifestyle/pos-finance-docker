@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 ENV APACHE_APPLICATION_ROOT /var/www/
 ENV APACHE_CONFDIR /etc/apache2
@@ -13,7 +13,7 @@ ENV APACHE_SERVER_NAME localhost
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        apache2>=2.4.39 \
+        apache2>=2.4.38 \
         curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -47,7 +47,7 @@ RUN { \
 } | tee "${APACHE_CONFDIR}/sites-available/000-default.conf"
 
 RUN a2enconf docker-php \
-    && a2enmod proxy_fcgi rewrite
+    && a2enmod http2 proxy_fcgi rewrite
 
 EXPOSE 80
 
