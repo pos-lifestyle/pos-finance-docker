@@ -1,50 +1,92 @@
-FROM php:7.3-cli-stretch
+FROM composer:1.8.5 as composer
+
+FROM php:7.3.19-cli-buster
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
         curl \
+        firebird-dev \
+        freetds-dev \
         git \
+        libbz2-dev \
+        libc-client-dev \
         libfreetype6-dev \
+        libgmp-dev \
         libicu-dev \
         libjpeg-dev \
+        libkrb5-dev \
+        libldap2-dev \
+        libldb-dev \
         libmcrypt-dev \
+        libpcre3-dev \
         libpng-dev \
         libpq-dev \
+        libssh2-1-dev \
+        libtidy-dev \
         libxml2-dev \
+        libxslt-dev \
         libzip-dev \
         ssh-client \
+        unixodbc \
+        unixodbc-dev \
         unzip \
         zip \
         zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-configure \
-        gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/ \
+    && ln -s /usr/include /usr/local/incl \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    && docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr \
     && docker-php-ext-install -j$(nproc) \
         bcmath \
+        bz2 \
+        calendar \
+        dba \
+        exif \
         gd \
+        gettext \
+        gmp \
+        imap \
         intl \
         json \
+        ldap \
         mbstring \
+        mysqli \
+        pcntl \
+        pdo_dblib \
+        pdo_firebird \
         pdo_mysql \
+        pdo_odbc \
         pdo_pgsql \
         pgsql \
+        soap \
+        sockets \
+        sysvmsg \
+        sysvsem \
+        sysvshm \
+        tidy \
         xml \
+        xmlrpc \
+        xsl \
         zip \
     && pecl install \
         mcrypt \
+        oauth-2.0.3 \
         redis \
+        ssh2-1.2 \
         xdebug \
     && docker-php-ext-enable \
         mcrypt \
+        oauth \
         redis \
+        ssh2 \
         xdebug
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
-ENV COMPOSER_SHA384 e0012edf3e80b6978849f5eff0d4b4e4c79ff1609dd1e613307e16318854d24ae64f26d17af3ef0bf7cfb710ca74755a
-ENV COMPOSER_VERSION 1.8.5
 ENV PHP_CONFDIR=/usr/local/etc/php/conf.d
 ENV PHP_CONFIG_REGISTER_GLOBALS=Off
 ENV PHP_CONFIG_ALLOW_URL_FOPEN=On
@@ -91,10 +133,7 @@ RUN { \
     echo "max_input_vars=\${PHP_CONFIG_MAX_INPUT_VARS}"; \
 } | tee "${PHP_CONFDIR}/pos-finance.ini"
 
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('SHA384', 'composer-setup.php') === getenv('COMPOSER_SHA384')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && php -r "unlink('composer-setup.php');"
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
