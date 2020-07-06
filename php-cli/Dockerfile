@@ -1,4 +1,4 @@
-FROM composer:1.8.5 as composer
+FROM composer:1.10.8 as composer
 
 FROM php:7.3.19-cli-buster
 
