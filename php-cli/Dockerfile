@@ -82,8 +82,7 @@ RUN apt-get update \
         mcrypt \
         oauth \
         redis \
-        ssh2 \
-        xdebug
+        ssh2
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -99,6 +98,7 @@ ENV PHP_CONFIG_MAX_EXECUTION_TIME=0
 ENV PHP_CONFIG_UPLOAD_MAX_FILESIZE=2M
 ENV PHP_CONFIG_MAX_FILE_UPLOADS=20
 ENV PHP_CONFIG_MAX_INPUT_VARS=1000
+ENV XDEBUG_ENABLE="Off"
 ENV XDEBUG_IDE_KEY=docker
 ENV XDEBUG_REMOTE_HOST=localhost
 ENV XDEBUG_REMOTE_PORT=9000
@@ -144,3 +144,7 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
         yarn \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+COPY docker-php-entrypoint /usr/local/bin/
+
+ENTRYPOINT [ "docker-php-entrypoint" ]

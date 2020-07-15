@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+# remove possible existing xdebug configuration from prior execution
+rm -f ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+
+# enable Xdebug
+if [ "${XDEBUG_ENABLE}" = "On" ]; then
+  echo "zend_extension=xdebug.so" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+fi
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- php-fpm "$@"
+fi
+
+exec "$@"

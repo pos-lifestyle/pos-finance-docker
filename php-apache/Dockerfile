@@ -75,8 +75,7 @@ RUN apt-get update \
         mcrypt \
         oauth \
         redis \
-        ssh2 \
-        xdebug
+        ssh2
 
 ENV APACHE_APPLICATION_ROOT /var/www/
 ENV APACHE_DOCUMENT_ROOT /var/www/html
@@ -95,6 +94,7 @@ ENV PHP_CONFIG_MAX_EXECUTION_TIME=120
 ENV PHP_CONFIG_UPLOAD_MAX_FILESIZE=50M
 ENV PHP_CONFIG_MAX_FILE_UPLOADS=20
 ENV PHP_CONFIG_MAX_INPUT_VARS=1000
+ENV XDEBUG_ENABLE="Off"
 ENV XDEBUG_IDE_KEY=docker
 ENV XDEBUG_REMOTE_HOST=localhost
 ENV XDEBUG_REMOTE_PORT=9000
@@ -159,3 +159,7 @@ RUN { \
 } | tee "${PHP_CONFDIR}/pos-finance.ini"
 
 RUN a2enmod http2 rewrite
+
+COPY docker-php-entrypoint /usr/local/bin/
+
+ENTRYPOINT [ "docker-php-entrypoint" ]

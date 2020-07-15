@@ -74,8 +74,7 @@ RUN apt-get update \
         mcrypt \
         oauth \
         redis \
-        ssh2 \
-        xdebug
+        ssh2
 
 ENV PHP_CONFDIR=/usr/local/etc/php/conf.d
 ENV PHP_CONFIG_REGISTER_GLOBALS=Off
@@ -89,6 +88,7 @@ ENV PHP_CONFIG_MAX_EXECUTION_TIME=120
 ENV PHP_CONFIG_UPLOAD_MAX_FILESIZE=50M
 ENV PHP_CONFIG_MAX_FILE_UPLOADS=20
 ENV PHP_CONFIG_MAX_INPUT_VARS=1000
+ENV XDEBUG_ENABLE="Off"
 ENV XDEBUG_IDE_KEY=docker
 ENV XDEBUG_REMOTE_HOST=localhost
 ENV XDEBUG_REMOTE_PORT=9000
@@ -124,4 +124,6 @@ RUN { \
     echo "max_input_vars=\${PHP_CONFIG_MAX_INPUT_VARS}"; \
 } | tee "${PHP_CONFDIR}/pos-finance.ini"
 
-USER www-data:www-data
+COPY docker-php-entrypoint /usr/local/bin/
+
+ENTRYPOINT [ "docker-php-entrypoint" ]
