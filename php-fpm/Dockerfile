@@ -67,32 +67,36 @@ RUN apt-get update \
     && pecl install \
         mcrypt \
         oauth-2.0.3 \
+        pcov \
         redis \
         ssh2-1.2 \
         xdebug \
     && docker-php-ext-enable \
         mcrypt \
         oauth \
+        pcov \
         redis \
-        ssh2 \
-        xdebug
+        ssh2
 
-ENV PHP_CONFDIR=/usr/local/etc/php/conf.d
-ENV PHP_CONFIG_REGISTER_GLOBALS=Off
-ENV PHP_CONFIG_ALLOW_URL_FOPEN=Off
-ENV PHP_CONFIG_ALLOW_URL_INCLUDE=Off
-ENV PHP_CONFIG_MAGIC_QUOTES_GPC=On
-ENV PHP_CONFIG_EXPOSE_PHP=Off
-ENV PHP_CONFIG_MBSTRING_FUNC_OVERLOAD=0
-ENV PHP_CONFIG_MEMORY_LIMIT=1G
-ENV PHP_CONFIG_MAX_EXECUTION_TIME=120
-ENV PHP_CONFIG_UPLOAD_MAX_FILESIZE=50M
-ENV PHP_CONFIG_MAX_FILE_UPLOADS=20
-ENV PHP_CONFIG_MAX_INPUT_VARS=1000
-ENV XDEBUG_IDE_KEY=docker
-ENV XDEBUG_REMOTE_HOST=localhost
-ENV XDEBUG_REMOTE_PORT=9000
-ENV XDEBUG_PROFILER_ENABLE=Off
+ENV PCOV_DIRECTORY auto
+ENV PCOV_ENABLE Off
+ENV PHP_CONFDIR /usr/local/etc/php/conf.d
+ENV PHP_CONFIG_REGISTER_GLOBALS Off
+ENV PHP_CONFIG_ALLOW_URL_FOPEN Off
+ENV PHP_CONFIG_ALLOW_URL_INCLUDE Off
+ENV PHP_CONFIG_MAGIC_QUOTES_GPC On
+ENV PHP_CONFIG_EXPOSE_PHP Off
+ENV PHP_CONFIG_MBSTRING_FUNC_OVERLOAD 0
+ENV PHP_CONFIG_MEMORY_LIMIT 1G
+ENV PHP_CONFIG_MAX_EXECUTION_TIME 120
+ENV PHP_CONFIG_UPLOAD_MAX_FILESIZE 50M
+ENV PHP_CONFIG_MAX_FILE_UPLOADS 20
+ENV PHP_CONFIG_MAX_INPUT_VARS 1000
+ENV XDEBUG_ENABLE Off
+ENV XDEBUG_IDE_KEY docker
+ENV XDEBUG_REMOTE_HOST localhost
+ENV XDEBUG_REMOTE_PORT 9000
+ENV XDEBUG_PROFILER_ENABLE Off
 
 # XDEBUG configuration
 RUN { \
@@ -111,6 +115,9 @@ RUN { \
     echo "xdebug.profiler_output_dir=\${XDEBUG_PROFILER_OUTPUT_DIR}"; \
     echo "xdebug.profiler_output_name=\${XDEBUG_PROFILER_OUTPUT_NAME}"; \
     echo; \
+    echo "pcov.enabled=\${PCOV_ENABLE}"; \
+    echo "pcov.directory=\${PCOV_DIRECTORY}"; \
+    echo; \
     echo "register_globals=\${PHP_CONFIG_REGISTER_GLOBALS}"; \
     echo "allow_url_fopen=\${PHP_CONFIG_ALLOW_URL_FOPEN}"; \
     echo "allow_url_include=\${PHP_CONFIG_ALLOW_URL_INCLUDE}"; \
@@ -124,4 +131,6 @@ RUN { \
     echo "max_input_vars=\${PHP_CONFIG_MAX_INPUT_VARS}"; \
 } | tee "${PHP_CONFDIR}/pos-finance.ini"
 
-USER www-data:www-data
+COPY docker-php-entrypoint /usr/local/bin/
+
+ENTRYPOINT [ "docker-php-entrypoint" ]
