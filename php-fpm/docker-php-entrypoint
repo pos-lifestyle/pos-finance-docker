@@ -2,6 +2,13 @@
 
 set -e
 
+# enable/disable PCOV
+if [ "${PCOV_ENABLE}" = "On" ]; then
+    PCOV_ENABLE=1
+else
+    PCOV_ENABLE=0
+fi
+
 # remove possible existing xdebug configuration from prior execution
 rm -f ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
 
