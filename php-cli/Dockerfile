@@ -90,6 +90,7 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
 ENV PCOV_DIRECTORY auto
 ENV PCOV_ENABLE Off
+ENV PCOV_EXCLUDE ""
 ENV PHP_CONFDIR /usr/local/etc/php/conf.d
 ENV PHP_CONFIG_REGISTER_GLOBALS Off
 ENV PHP_CONFIG_ALLOW_URL_FOPEN On
@@ -126,6 +127,7 @@ RUN { \
     echo; \
     echo "pcov.enabled=\${PCOV_ENABLE}"; \
     echo "pcov.directory=\${PCOV_DIRECTORY}"; \
+    echo "pcov.exclude=\${PCOV_EXCLUDE}"; \
     echo; \
     echo "register_globals=\${PHP_CONFIG_REGISTER_GLOBALS}"; \
     echo "allow_url_fopen=\${PHP_CONFIG_ALLOW_URL_FOPEN}"; \
