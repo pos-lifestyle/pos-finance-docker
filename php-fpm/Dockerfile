@@ -67,19 +67,15 @@ RUN apt-get update \
     && pecl install \
         mcrypt \
         oauth-2.0.3 \
-        pcov \
         redis \
         ssh2-1.2 \
         xdebug \
     && docker-php-ext-enable \
         mcrypt \
         oauth \
-        pcov \
         redis \
         ssh2
 
-ENV PCOV_DIRECTORY auto
-ENV PCOV_ENABLE Off
 ENV PHP_CONFDIR /usr/local/etc/php/conf.d
 ENV PHP_CONFIG_REGISTER_GLOBALS Off
 ENV PHP_CONFIG_ALLOW_URL_FOPEN Off
@@ -114,9 +110,6 @@ RUN { \
     echo "xdebug.profiler_enable_trigger_value=\${XDEBUG_PROFILER_ENABLE_TRIGGER_VALUE}"; \
     echo "xdebug.profiler_output_dir=\${XDEBUG_PROFILER_OUTPUT_DIR}"; \
     echo "xdebug.profiler_output_name=\${XDEBUG_PROFILER_OUTPUT_NAME}"; \
-    echo; \
-    echo "pcov.enabled=\${PCOV_ENABLE}"; \
-    echo "pcov.directory=\${PCOV_DIRECTORY}"; \
     echo; \
     echo "register_globals=\${PHP_CONFIG_REGISTER_GLOBALS}"; \
     echo "allow_url_fopen=\${PHP_CONFIG_ALLOW_URL_FOPEN}"; \
