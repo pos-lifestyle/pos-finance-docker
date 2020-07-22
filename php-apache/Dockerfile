@@ -163,3 +163,5 @@ RUN a2enmod http2 rewrite
 COPY docker-php-entrypoint /usr/local/bin/
 
 ENTRYPOINT [ "docker-php-entrypoint" ]
+
+CMD [ "apache2-foreground" ]

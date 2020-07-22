@@ -127,3 +127,5 @@ RUN { \
 COPY docker-php-entrypoint /usr/local/bin/
 
 ENTRYPOINT [ "docker-php-entrypoint" ]
+
+CMD [ "php-fpm" ]
