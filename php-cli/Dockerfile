@@ -157,3 +157,5 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 COPY docker-php-entrypoint /usr/local/bin/
 
 ENTRYPOINT [ "docker-php-entrypoint" ]
+
+CMD [ "php", "-a" ]
