@@ -27,6 +27,7 @@ RUN apt-get update \
         libxml2-dev \
         libxslt-dev \
         libzip-dev \
+        postgresql \
         ssh-client \
         unixodbc \
         unixodbc-dev \
